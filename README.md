@@ -14,8 +14,9 @@ and more!!
 # ͓̽C͓͓̽̽H͓͓̽̽A͓͓̽̽T͓̽
 We use Padlet to chat, and yes, to see it we need to do someTHING thiຖງ ຟhคt iŞ it @?
 ------------------------------------------------------------------------------------------
-#🅰🕴
+# A🕴
 Is real 🅰🕴 downloading and working to help with homework and these things
+-------------------------------------------------------------------------------------------
 #̷A̷̷P̷̷P̷
 have fun and my website is the main thing and more things
 
