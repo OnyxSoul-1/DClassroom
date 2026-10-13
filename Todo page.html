@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, stroke-width=device-width, initial-scale=1.0">
+    <title>Google Classroom To-do Clone</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #3c4043;
+        }
+
+        body {
+            background-color: #ffffff;
+            padding: 24px;
+        }
+
+        .todo-header {
+            font-size: 22px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tabs-container {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            color: #5f6368;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -1px;
+        }
+
+        .tab.active {
+            color: #1a73e8;
+            border-bottom: 3px solid #1a73e8;
+        }
+
+        .dropdown-container {
+            margin-bottom: 24px;
+        }
+
+        .class-select {
+            padding: 10px 16px;
+            font-size: 14px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            width: 320px;
+            background-color: #fff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .section-header:hover {
+            background-color: #f8f9fa;
+        }
+
+        .section-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #1a73e8;
+            font-weight: 500;
+        }
+
+        .arrow-icon {
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+
+        .collapsed .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .assignment-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .assignment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid #f1f3f4;
+            text-decoration: none;
+            background-color: #ffffff;
+            transition: background-color 0.2s;
+        }
+
+        .assignment-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .assignment-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .assignment-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #e8f0fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .assignment-icon svg {
+            fill: #1a73e8;
+            width: 20px;
+            height: 20px;
+        }
+
+        .icon-malay {
+            background-color: #f1f3f4;
+        }
+        .icon-malay svg {
+            fill: #5f6368;
+        }
+
+        .assignment-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #3c4043;
+            margin-bottom: 4px;
+        }
+
+        .assignment-subject {
+            font-size: 12px;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .assignment-meta {
+            text-align: right;
+        }
+
+        .assignment-date {
+            font-size: 13px;
+            color: #70757a;
+            margin-bottom: 4px;
+        }
+
+        .assignment-status {
+            font-size: 12px;
+            color: #70757a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-header">To-do</div>
+    <div class="tabs-container">
+        <a href="" class="tab">Assigned</a>
+        <a href="" class="tab active">Missing</a>
+        <a href="" class="tab">Done</a>
+    </div>
+
+    <div class="dropdown-container">
+        <select class="class-select">
+            <option>All classes</option>
+        </select>
+    </div>
+
+    <div class="section-header">
+        <div class="section-left">This week</div>
+        <div class="section-right">0 <span>▼</span></div>
+    </div>
+    <div class="section-header">
+        <div class="section-left">Last week</div>
+        <div class="section-right">0 <span>▼</span></div>
+    </div>
+
+    <div class="section-header" onclick="toggleAssignments()">
+        <div class="section-left">Earlier</div>
+        <div class="section-right">
+            <span style="color: #1a73e8;">3</span>
+            <span class="arrow-icon">▲</span>
+        </div>
+    </div>
+
+    <div class="assignment-container" id="assignmentContainer">
+        
+        <!-- BUTTON 1 -->
+        <a href="https://www.arabic-toons.com/" target="_blank" class="assignment-row">
+            <div class="assignment-info">
+                <div class="assignment-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                </div>
+                <div>
+                    <div class="assignment-title">A_ Reading Assignment 3.1 Arabic Toons</div>
+                    <div class="assignment-subject">Arabic</div>
+                </div>
+            </div>
+            <div class="assignment-meta">
+                <div class="assignment-date">Monday, Feb 23</div>
+                <div class="assignment-status"> accepting work</div>
+            </div>
+        </a>
+
+        <!-- BUTTON 2 -->
+        <a href="https://toustream.xyz/" target="_blank" class="assignment-row">
+            <div class="assignment-info">
+                <div class="assignment-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                </div>
+                <div>
+                    <div class="assignment-title">A_ Writing Fictional _ 4th FEBRUARY 2026 - FINAL Toustream</div>
+                    <div class="assignment-subject">English</div>
+                </div>
+            </div>
+            <div class="assignment-meta">
+                <div class="assignment-date">Tuesday, Feb 10</div>
+                <div class="assignment-status"> accepting work</div>
+            </div>
+        </a>
+
+        <!-- BUTTON 3 -->
+        <a href="https://mastodon.social/home" target="_blank" class="assignment-row">
+            <div class="assignment-info">
+                <div class="assignment-icon icon-malay">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                </div>
+                <div>
+                    <div class="assignment-title">Q_ Diagnostic Test mastodon.soclal 2025/2026 - Grade 8</div>
+                    <div class="assignment-subject">CS</div>
+                </div>
+            </div>
+            <div class="assignment-meta">
+                <div class="assignment-date">Thursday, Sep 18</div>
+                <div class="assignment-status"> accepting work</div>
+            </div>
+        </a>
+
+        <!-- BUTTON 4 -->
+        <a href="https://macosweb.netlify.app/" target="_blank" class="assignment-row">
+            <div class="assignment-info">
+                <div class="assignment-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                </div>
+                <div>
+                    <div class="assignment-title">New macOS Title 4</div>
+                    <div class="assignment-subject">CS</div>
+                </div>
+            </div>
+            <div class="assignment-meta">
+                <div class="assignment-date">Friday, Oct 10</div>
+                <div class="assignment-status"> accepting work</div>
+            </div>
+        </a>
+
+        <!-- BUTTON 5 -->
+        <a href="https://monochrome.tf/" target="_blank" class="assignment-row">
+            <div class="assignment-info">
+                <div class="assignment-icon icon-malay">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                </div>
+                <div>
+                    <div class="assignment-title">New Monochrome Title 5</div>
+                    <div class="assignment-subject">Music class</div>
+                </div>
+            </div>
+            <div class="assignment-meta">
+                <div class="assignment-date">Wednesday, Nov 12</div>
+                <div class="assignment-status"> accepting work</div>
+            </div>
+        </a>
+
+        <!-- BUTTON 6 -->
+        <a href="https://sites.google.com/imas.edu.my/nextstation-3/home" target="_blank" class="assignment-row">
+            <div class="assignment-info">
+                <div class="assignment-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+                </div>
+                <div>
+                    <div class="assignment-title">GET CHAT,GAMES AND AI STRONG</div>
+                    <div class="assignment-subject">Type IN CLASSROOM AI (gg=games=password=homework123) (chat=is chat=password=homework123) (ai=is ai=password=homework123)</div>
+                </div>
+            </div>
+            <div class="assignment-meta">
+                <div class="assignment-date">Monday, Dec 15</div>
+                <div class="assignment-status">Not accepting work</div>
+            </div>
+        </a>
+
+    </div>
+
+    <script>
+        function toggleAssignments() {
+            const container = document.getElementById('assignmentContainer');
+            const header = container.previousElementSibling;
+            
+            if (container.style.display === "none") {
+                container.style.display = "flex";
+                header.classList.remove('collapsed');
+            } else {
+                container.style.display = "none";
+                header.classList.add('collapsed');
+            }
+        }
+    </script>
+</body>
+</html>

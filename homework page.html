@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Classroom Clone</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #3c4043;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Top Navbar Layout */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 24px;
+            border-bottom: 1px solid #e0e0e0;
+            height: 64px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-icon {
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 50%;
+        }
+
+        .menu-icon:hover {
+            background-color: #f1f3f4;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            color: #5f6368;
+        }
+
+        /* Main Workspace Content */
+        .container {
+            display: flex;
+            flex: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 32px 24px;
+            gap: 24px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header Style Block */
+        .assignment-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            position: relative;
+        }
+
+        .assignment-icon-wrapper {
+            background-color: #c2e7ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .assignment-icon {
+            width: 20px;
+            height: 20px;
+            fill: #001d35;
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .assignment-title {
+            font-size: 28px;
+            font-weight: 400;
+            color: #1f1f1f;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .assignment-meta {
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 4px;
+        }
+
+        .assignment-score {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1f1f1f;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 16px;
+            margin-top: 8px;
+        }
+
+        .more-options {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .more-options:hover {
+            background-color: #f1f3f4;
+        }
+
+        /* Comment System Styling */
+        .comments-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .section-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3c4043;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .section-icon {
+            width: 20px;
+            height: 20px;
+            fill: #5f6368;
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 28px;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 12px;
+            background-color: #f8f9fa;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            background-color: #1a73e8;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .comment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .comment-author-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comment-author {
+            font-weight: 500;
+            color: #3c4043;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: #70757a;
+        }
+
+        .comment-text {
+            color: #1f1f1f;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .comment-input-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: 28px;
+            position: relative;
+        }
+
+        .comment-field-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 10px 40px 10px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .comment-input:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.5;
+            disabled: true;
+        }
+
+        .send-btn.active {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .send-icon {
+            width: 20px;
+            height: 20px;
+            fill: #1a73e8;
+        }
+
+        /* Sidebar Panels Layout */
+        .sidebar {
+            width: 290px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card {
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fff;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 400;
+            color: #1f1f1f;
+        }
+
+        .card-status {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        /* 9 Functioning Blank Buttons Grid */
+        .grid-9-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .blank-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 4px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color: #1a73e8;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .blank-btn:hover {
+            background-color: #f4f8fe;
+            border-color: #1a73e8;
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color: #1a73e8;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-button:hover {
+            background-color: #f8f9fa;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #1a73e8;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #1557b0;
+        }
+
+        /* Private Comments Custom Styling */
+        .private-comments-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #3c4043;
+            margin-bottom: 12px;
+        }
+
+        .private-input-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-top: 12px;
+        }
+
+        .private-input {
+            width: 100%;
+            padding: 8px 36px 8px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .private-input:focus {
+            border-color: #1a73e8;
+        }
+
+        .private-send-btn {
+            position: absolute;
+            right: 8px;
+            background: none;
+            border: none;
+            opacity: 0.5;
+            cursor: pointer;
+            display: flex;
+        }
+
+        .private-send-btn.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <div class="navbar">
+        <div class="nav-left">
+            <div class="menu-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#5f6368"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            </div>
+            <div class="logo-text">Google Classroom</div>
+        </div>
+    </div>
+
+    <!-- Interface Body -->
+    <div class="container">
+        <!-- Content Panel Left -->
+        <div class="main-content">
+            <div class="assignment-header">
+                <div class="assignment-icon-wrapper">
+                    <svg class="assignment-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 14H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2z"/></svg>
+                </div>
+                <div class="header-text">
+                    <h1 class="assignment-title">A_7.4 FLY - KIK-  GAMEART (19/5/26)</h1>
+                    <div class="assignment-meta">MR.OS • May 19</div>
+                    <div class="assignment-score">5/5</div>
+                </div>
+                <div class="more-options">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="#5f6368"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </div>
+            </div>
+
+            <!-- Functional Class Comments Section -->
+            <div class="comments-section">
+                <div class="section-title-wrapper">
+                    <svg class="section-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                    <span>Class comments</span>
+                </div>
+                
+                <!-- Comments Container Target List -->
+                <div class="comments-list" id="class-comments-container">
+                    <!-- Dynamic updates post here -->
+                </div>
+
+                <!-- Input Component Row -->
+                <div class="comment-input-container">
+                    <div class="comment-avatar">U</div>
+                    <div class="comment-field-wrapper">
+                        <input type="text" id="class-comment-input" class="comment-input" placeholder="Add class comment...">
+                        <button id="class-send-btn" class="send-btn" disabled>
+                            <svg class="send-icon" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Utility Sidebar Panels Right -->
+        <div class="sidebar">
+            <!-- Assignment Progress Card Container -->
+            <div class="card">
+                <div class="card-header-row">
+                    <h2 class="card-title">Your work</h2>
+                    <span class="card-status">Graded</span>
+                </div>
+
+                <!-- Grid Component Housing The 9 Tab Launch Buttons -->
+                <div class="grid-9-buttons">
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/art" target="_blank" class="blank-btn">ART</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/english" target="_blank" class="blank-btn">English</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/science" target="_blank" class="blank-btn">Science</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/cs" target="_blank" class="blank-btn">CS</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/pe" target="_blank" class="blank-btn">PE</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/cca" target="_blank" class="blank-btn">CCA</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/cca2" target="_blank" class="blank-btn">CCA2</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/arabic" target="_blank" class="blank-btn">ARABIC</a>
+                    <a href="https://sites.google.com/imas.edu.my/googlclassroom/music-class" target="_blank" class="blank-btn"> Music Class</a>
+                </div>
+
+                <button class="action-button">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#1a73e8"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    Add or create
+                </button>
+                <button class="submit-button">Resubmit</button>
+            </div>
+
+            <!-- Functional Private Comments Card Container -->
+            <div class="card">
+                <div class="private-comments-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="#5f6368"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    <span>Private comments</span>
+                </div>
+
+                <!-- Private Comments Container Target List -->
+                <div class="comments-list" id="private-comments-container" style="margin-left: 0; margin-bottom: 8px;">
+                    <!-- Dynamic updates post here -->
+                </div>
+
+                <div class="private-input-wrapper">
+                    <input type="text" id="private-comment-input" class="private-input" placeholder="Add private comment to Najwahasanah...">
+                    <button id="private-send-btn" class="private-send-btn" disabled>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="#1a73e8"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Behavioral JavaScript Integration Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Helper function to link input boxes to execution buttons
+            const configureCommentInput = (inputId, buttonId, containerId, authorName, avatarChar) => {
+                const inputEl = document.getElementById(inputId);
+                const buttonEl = document.getElementById(buttonId);
+                const containerEl = document.getElementById(containerId);
+
+                // Listen to keyboard text variations to toggle active button colors
+                inputEl.addEventListener('input', () => {
+                    if (inputEl.value.trim().length > 0) {
+                        buttonEl.removeAttribute('disabled');
+                        buttonEl.classList.add('active');
+                    } else {
+                        buttonEl.setAttribute('disabled', 'true');
+                        buttonEl.classList.remove('active');
+                    }
+                });
+
+                // Post event trigger action logic
+                const appendComment = () => {
+                    const text = inputEl.value.trim();
+                    if (!text) return;
+
+                    const now = new Date();
+                    const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    // Generate a structural comment item element matching spec theme styles
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    commentItem.innerHTML = `
+                        <div class="comment-avatar" style="${authorName === 'You' ? 'background-color: #1a73e8;' : ''}">${avatarChar}</div>
+                        <div class="comment-details">
+                            <div class="comment-author-row">
+                                <span class="comment-author">${authorName}</span>
+                                <span class="comment-time">${formattedTime}</span>
+                            </div>
+                            <div class="comment-text">${escapeHTML(text)}</div>
+                        </div>
+                    `;
+
+                    containerEl.appendChild(commentItem);
+                    
+                    // Clear input text fields and toggle components down
+                    inputEl.value = '';
+                    buttonEl.setAttribute('disabled', 'true');
+                    buttonEl.classList.remove('active');
+                };
+
+                buttonEl.addEventListener('click', appendComment);
+                inputEl.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') appendComment();
+                });
+            };
+
+            // Basic context sanitizer utility to mitigate text syntax processing breaks
+            const escapeHTML = (str) => {
+                return str.replace(/[&<>'"]/g, 
+                    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+                );
+            };
+
+            // Instantiate bindings for both Class and Private comment nodes
+            configureCommentInput('class-comment-input', 'class-send-btn', 'class-comments-container', 'You', 'U');
+            configureCommentInput('private-comment-input', 'private-send-btn', 'private-comments-container', 'You', 'U');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom</title>
+    <!-- Google Material Symbols & Fonts -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+        }
+        body {
+            background: #f8f9fa;
+            color: #202124;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== TOP NAV ===== */
+        nav {
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid #dadce0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .navleft {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .navleft a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #5f6368;
+        }
+        .classroomicon {
+            height: 28px;
+            width: 28px;
+        }
+        .classtext {
+            font-size: 22px;
+            font-weight: 400;
+        }
+        .classtext:hover {
+            text-decoration: underline;
+            color: #1e8e3e;
+        }
+        .navright {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .navright a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #5f6368;
+        }
+        .navright span {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .navright span:hover {
+            background: #f1f3f4;
+        }
+        .avataricon {
+            height: 35px;
+            width: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .maindev {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .mainsidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #dadce0;
+            padding: 12px 0 12px 8px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar-section {
+            margin-bottom: 8px;
+        }
+        .sidebar-section .section-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 16px 4px 12px;
+        }
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px 12px;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+            color: #3c4043;
+            font-weight: 500;
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+        }
+        .sidebar-btn:hover {
+            background: #f1f3f4;
+        }
+        .sidebar-btn.active {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar-btn .icon {
+            font-size: 22px;
+        }
+        .sidebar-btn .badge {
+            margin-left: auto;
+            background: #e8eaed;
+            color: #5f6368;
+            font-size: 12px;
+            padding: 0 10px;
+            border-radius: 12px;
+        }
+        .sidebar-btn .class-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .sidebar-btn .class-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .sidebar-btn .class-name {
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        #classListContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 4px;
+        }
+        #classListContainer .sidebar-btn {
+            padding-left: 28px;
+            font-weight: 400;
+        }
+
+        /* ===== CONTENT AREA ===== */
+        .content-area {
+            flex: 1;
+            padding: 20px 24px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        /* ===== HOME / CLASS CARDS ===== */
+        .card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .class-card {
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .class-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+        }
+        .card-top {
+            height: 100px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 16px;
+            position: relative;
+            color: white;
+        }
+        .card-top h2 {
+            font-size: 18px;
+            font-weight: 500;
+            color: white;
+            margin: 0 0 2px 0;
+        }
+        .card-top p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.85);
+            margin: 2px 0;
+        }
+        .card-top .more {
+            position: absolute;
+            right: 12px;
+            top: 10px;
+            color: white;
+            cursor: pointer;
+        }
+        .card-middle {
+            height: 120px;
+            position: relative;
+            background: white;
+            border-bottom: 1px solid #e8eaed;
+        }
+        .card-avatar {
+            height: 70px;
+            width: 70px;
+            border-radius: 50%;
+            position: absolute;
+            right: 16px;
+            top: -35px;
+            border: 3px solid white;
+            background: white;
+            object-fit: cover;
+        }
+        .card-bottom {
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 16px;
+            gap: 16px;
+            background: white;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+        .card-bottom a {
+            color: #5f6368;
+            text-decoration: none;
+        }
+        .card-bottom span {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .card-bottom span:hover {
+            background: #f1f3f4;
+        }
+
+        .empty-state {
+            width: 100%;
+            text-align: center;
+            color: #5f6368;
+            padding: 60px 20px;
+            font-size: 16px;
+        }
+        .empty-state .big-icon {
+            font-size: 64px;
+            color: #dadce0;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        /* ===== CLASS DETAIL VIEW ===== */
+        .detail-view {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+        .detail-view.active {
+            display: flex;
+        }
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e8eaed;
+        }
+        .detail-header .back-btn {
+            cursor: pointer;
+            font-size: 28px;
+            color: #5f6368;
+        }
+        .detail-header h1 {
+            font-size: 24px;
+            font-weight: 400;
+            color: #202124;
+        }
+        .detail-tabs {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid #dadce0;
+            margin-bottom: 16px;
+        }
+        .detail-tabs button {
+            background: none;
+            border: none;
+            padding: 8px 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #5f6368;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .detail-tabs button.active {
+            color: #1a73e8;
+            border-bottom-color: #1a73e8;
+        }
+        .detail-tabs button:hover {
+            color: #202124;
+        }
+        .detail-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .detail-content .tab-pane {
+            display: none;
+        }
+        .detail-content .tab-pane.active {
+            display: block;
+        }
+
+        /* Stream posts */
+        .post {
+            background: white;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+        .post .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .post .post-header .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .post .post-header .name {
+            font-weight: 500;
+            color: #202124;
+        }
+        .post .post-header .time {
+            font-size: 12px;
+            color: #5f6368;
+            margin-left: auto;
+        }
+        .post .post-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+        .post .post-actions {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            color: #5f6368;
+        }
+        .post .post-actions span {
+            cursor: pointer;
+        }
+        .post .post-actions span:hover {
+            color: #1a73e8;
+        }
+
+        /* Classwork (assignments) */
+        .assignment {
+            background: white;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .assignment .info h4 {
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+        .assignment .info p {
+            font-size: 13px;
+            color: #5f6368;
+        }
+        .assignment .status {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a73e8;
+        }
+
+        /* People */
+        .people-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .people-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+        .people-item .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .people-item .name {
+            font-weight: 500;
+            color: #202124;
+        }
+        .people-item .role {
+            font-size: 13px;
+            color: #5f6368;
+            margin-left: auto;
+        }
+
+        /* ===== MODAL (add class) ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 35px;
+            width: 90%;
+            max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-box h2 {
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dadce0;
+            padding-bottom: 12px;
+        }
+        .modal-box label {
+            display: block;
+            font-weight: 500;
+            margin-top: 14px;
+            color: #3c4043;
+        }
+        .modal-box input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 4px;
+            box-sizing: border-box;
+        }
+        .modal-box input:focus {
+            border-color: #1a73e8;
+            outline: none;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            border-top: 1px solid #dadce0;
+            padding-top: 16px;
+        }
+        .modal-actions button {
+            padding: 8px 24px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+            background: transparent;
+        }
+        .modal-actions .btn-save {
+            background: #1a73e8;
+            color: white;
+        }
+        .modal-actions .btn-save:hover { background: #1557b0; }
+        .modal-actions .btn-cancel { color: #5f6368; }
+        .modal-actions .btn-cancel:hover { background: #f1f3f4; }
+
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .color-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.2s;
+        }
+        .color-swatch.active { border-color: #202124; }
+
+        /* ===== AI CHAT PANEL ===== */
+        .ai-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 500;
+        }
+        .ai-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #1a73e8;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .ai-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+        .ai-window {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 380px;
+            height: 100vh;
+            background: #ffffff;
+            box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            border-left: 1px solid #dadce0;
+            font-family: 'Roboto', 'Google Sans', sans-serif;
+        }
+        .ai-window.open { display: flex; }
+        .ai-header {
+            background: #ffffff;
+            color: #202124;
+            padding: 16px 20px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dadce0;
+        }
+        .ai-header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .ai-header .close-ai {
+            background: none;
+            border: none;
+            color: #5f6368;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ai-header .close-ai:hover {
+            background: #f1f3f4;
+            color: #202124;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-locked {
+            background-color: #fef3c7;
+            color: #d97706;
+            border: 1px solid #f59e0b;
+        }
+        .badge-loading {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            border: 1px solid #38bdf8;
+        }
+        .badge-active {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #22c55e;
+        }
+
+        /* Progress Bar */
+        .ai-progress-container {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dadce0;
+        }
+        .ai-progress-text {
+            font-size: 12px;
+            color: #3c4043;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .ai-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e8eaed;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .ai-progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #1a73e8;
+            transition: width 0.2s ease;
+        }
+
+        /* Messages */
+        .ai-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .ai-messages .msg {
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 85%;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.4;
+            font-family: 'Roboto', sans-serif;
+        }
+        .ai-messages .msg.bot {
+            background: #ffffff;
+            color: #202124;
+            border: 1px solid #dadce0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .ai-messages .msg.user {
+            background: #1a73e8;
+            color: #ffffff;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Input Area */
+        .ai-input-area {
+            padding: 12px 16px;
+            background: #ffffff;
+            border-top: 1px solid #dadce0;
+        }
+        .ai-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 2px solid #1a73e8;
+            border-radius: 24px;
+            padding: 4px 6px 4px 14px;
+            background: #ffffff;
+        }
+        .ai-input-wrapper input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+            background: transparent;
+            color: #202124;
+        }
+        .ai-input-wrapper button {
+            background: #1a73e8;
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .ai-input-wrapper button:hover {
+            background: #1557b0;
+        }
+        .ai-input-wrapper button span {
+            font-size: 18px;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .mainsidebar { width: 60px; padding: 8px 0; }
+            .mainsidebar .sidebar-btn span:not(.icon) { display: none; }
+            .mainsidebar .sidebar-btn { padding: 12px 16px; justify-content: center; }
+            .mainsidebar .section-label { display: none; }
+            #classListContainer .sidebar-btn { padding-left: 16px; }
+            .ai-window { width: 100%; right: 0; top: 0; height: 100vh; }
+            .content-area { padding: 12px; }
+            .class-card { width: 100%; max-width: 340px; }
+            .detail-header h1 { font-size: 20px; }
+        }
+        @media (max-width: 450px) {
+            nav { padding: 0 12px; }
+            .navleft .classtext { font-size: 18px; }
+            .modal-box { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOP NAV ===== -->
+    <nav>
+        <div class="navleft">
+            <a href="#"><span class="material-symbols-outlined">menu</span></a>
+            <a href="#"><img class="classroomicon" src="https://www.gstatic.com/classroom/logo_square_rounded.svg" alt=""></a>
+            <a href="#" class="classtext" id="classroomTitle">Classroom</a>
+        </div>
+        <div class="navright">
+            <a href="#" id="addClassBtnTop"><span class="material-symbols-outlined">add</span></a>
+            <a href="https://sites.google.com/imas.edu.my/googlclassroom/to-do" target="_blank" title="Google Apps">
+                <span class="material-symbols-outlined">apps</span>
+            </a>
+            <a href="https://sites.google.com/imas.edu.my/onyxsoul/home" target="_blank">
+                <img class="avataricon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn6C9YNnBxx108VmASAWKjYjSV6bejY7_MzQ&s" alt="">
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN ===== -->
+    <div class="maindev">
+
+        <!-- SIDEBAR -->
+        <div class="mainsidebar" id="sidebar">
+            <div class="sidebar-section">
+                <button class="sidebar-btn active" data-view="home">
+                    <span class="icon material-symbols-outlined">home</span>
+                    <span>Home</span>
+                </button>
+                <button class="sidebar-btn" data-view="calendar">
+                    <span class="icon material-symbols-outlined">calendar_today</span>
+                    <span>Calendar</span>
+                </button>
+            </div>
+            <div class="sidebar-section">
+                <button class="sidebar-btn" data-view="enrolled">
+                    <span class="icon material-symbols-outlined">school</span>
+                    <span>Enrolled</span>
+                    <span class="badge" id="enrolledCount">0</span>
+                </button>
+                <button class="sidebar-btn" data-view="todo">
+                    <span class="icon material-symbols-outlined">fact_check</span>
+                    <span>To-do</span>
+                    <span class="badge" id="todoCount">0</span>
+                </button>
+            </div>
+            <div class="sidebar-section">
+                <div class="section-label">My Classes</div>
+                <div id="classListContainer"></div>
+            </div>
+            <div class="sidebar-section" style="margin-top: auto; border-top: 1px solid #e8eaed; padding-top: 8px;">
+                <button class="sidebar-btn" id="settingsBtn">
+                    <span class="icon material-symbols-outlined">Settings</span>
+                    <span>Settings</span>
+                </button>
+                <button class="sidebar-btn" data-view="archive">
+                    <span class="icon material-symbols-outlined">archive</span>
+                    <span>Archived</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area" id="contentArea">
+            <div id="homeView" class="view">
+                <div class="card-grid" id="classCardGrid"></div>
+            </div>
+
+            <div id="detailView" class="detail-view">
+                <div class="detail-header">
+                    <span class="back-btn material-symbols-outlined" id="backToHome">arrow_back</span>
+                    <h1 id="detailClassName">Class Name</h1>
+                </div>
+                <div class="detail-tabs">
+                    <button class="active" data-tab="stream">Stream</button>
+                    <button data-tab="classwork">Classwork</button>
+                    <button data-tab="people">People</button>
+                </div>
+                <div class="detail-content" id="detailContent"></div>
+            </div>
+
+            <div id="emptyView" class="empty-state" style="display:none;">
+                <span class="big-icon material-symbols-outlined">info</span>
+                <p id="emptyMessage">Nothing to show here.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL (ADD CLASS) ===== -->
+    <div class="modal-overlay" id="addClassModal">
+        <div class="modal-box">
+            <h2>📚 Add New Class</h2>
+            <form id="addClassForm">
+                <label for="className">Class Name</label>
+                <input type="text" id="className" placeholder="e.g., Mathematics" required>
+
+                <label for="teacherName">Teacher</label>
+                <input type="text" id="teacherName" placeholder="e.g., Ms. Smith" required>
+
+                <label for="section">Section / Batch</label>
+                <input type="text" id="section" placeholder="e.g., Batch 12 Sec - A" required>
+
+                <label>Color</label>
+                <div class="color-picker" id="colorPicker">
+                    <div class="color-swatch active" style="background:#1a73e8;" data-color="#1a73e8"></div>
+                    <div class="color-swatch" style="background:#e37400;" data-color="#e37400"></div>
+                    <div class="color-swatch" style="background:#0d652d;" data-color="#0d652d"></div>
+                    <div class="color-swatch" style="background:#b80672;" data-color="#b80672"></div>
+                    <div class="color-swatch" style="background:#9334e6;" data-color="#9334e6"></div>
+                    <div class="color-swatch" style="background:#d93025;" data-color="#d93025"></div>
+                    <div class="color-swatch" style="background:#4285f4;" data-color="#4285f4"></div>
+                    <div class="color-swatch" style="background:#fbbc04;" data-color="#fbbc04"></div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn-save">Add Class</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== AI CHAT (RIGHT-SIDE PANEL) ===== -->
+    <div class="ai-float">
+        <button class="ai-btn" id="aiToggleBtn" title="Classroom AI Assistant">
+            <span class="material-symbols-outlined">smart_toy</span>
+        </button>
+    </div>
+    <div class="ai-window open" id="aiWindow">
+        <div class="ai-header">
+            <div class="ai-header-title">
+                <span>Classroom AI</span>
+                <span class="status-badge badge-locked" id="aiStatusBadge">LOCKED</span>
+            </div>
+            <button class="close-ai" id="aiCloseBtn">✕</button>
+        </div>
+        <div class="ai-progress-container" id="aiProgressContainer" style="display: none;">
+            <div class="ai-progress-text" id="aiProgressText">Downloading: 0%</div>
+            <div class="ai-progress-bar">
+                <div class="ai-progress-bar-fill" id="aiProgressBarFill"></div>
+            </div>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="msg bot">Hi Welcome to classroom AI.</div>
+        </div>
+        <div class="ai-input-area">
+            <div class="ai-input-wrapper">
+                <input type="text" id="aiInput" placeholder="Type ask anything" />
+                <button id="aiSendBtn"><span class="material-symbols-outlined">send</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== JS ENGINE IMPORT & LOGIC ===== -->
+    <script type="module">
+        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
+
+        // ============================================================
+        // DATA
+        // ============================================================
+        let classes = [];
+        let classIdCounter = 1;
+        let selectedColor = '#1a73e8';
+        let currentView = 'home';
+        let currentClassId = null;
+
+        // Sample initial class
+        classes.push({
+            id: classIdCounter++,
+            name: 'CLASSROOM',
+            teacher: 'CLASSROOM WORKERS',
+            section: 'Batch 11 Sec - J',
+            color: '#1a73e8',
+            initial: 'M',
+            assignments: [
+                { title: 'One homework', due: 'Due: Tomorrow' },
+                { title: 'DO NOT DO THE BAD THINGS', due: 'Due: Friday' }
+            ],
+            stream: [
+                { author: 'Teacher', initial: 'T', time: '2 hours ago', content: '📢 Welcome to Classroom! Check the classwork for assignments.' }
+            ]
+        });
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const cardGrid = document.getElementById('classCardGrid');
+        const classListContainer = document.getElementById('classListContainer');
+        const enrolledCount = document.getElementById('enrolledCount');
+        const todoCount = document.getElementById('todoCount');
+
+        const homeView = document.getElementById('homeView');
+        const detailView = document.getElementById('detailView');
+        const emptyView = document.getElementById('emptyView');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const detailClassName = document.getElementById('detailClassName');
+        const detailContent = document.getElementById('detailContent');
+        const backToHome = document.getElementById('backToHome');
+
+        const modal = document.getElementById('addClassModal');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const addBtnTop = document.getElementById('addClassBtnTop');
+        const cancelBtn = document.getElementById('cancelModalBtn');
+        const form = document.getElementById('addClassForm');
+
+        const swatches = document.querySelectorAll('.color-swatch');
+        const sidebarBtns = document.querySelectorAll('.sidebar-btn[data-view]');
+        const tabBtns = document.querySelectorAll('.detail-tabs button');
+
+        // AI elements
+        const aiToggle = document.getElementById('aiToggleBtn');
+        const aiWindow = document.getElementById('aiWindow');
+        const aiClose = document.getElementById('aiCloseBtn');
+        const aiInput = document.getElementById('aiInput');
+        const aiSend = document.getElementById('aiSendBtn');
+        const aiMessages = document.getElementById('aiMessages');
+        const aiStatusBadge = document.getElementById('aiStatusBadge');
+        const aiProgressContainer = document.getElementById('aiProgressContainer');
+        const aiProgressText = document.getElementById('aiProgressText');
+        const aiProgressBarFill = document.getElementById('aiProgressBarFill');
+
+        // ============================================================
+        // COLOR PICKER
+        // ============================================================
+        swatches.forEach(sw => {
+            sw.addEventListener('click', function() {
+                swatches.forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                selectedColor = this.dataset.color;
+            });
+        });
+
+        // ============================================================
+        // MODAL CONTROLS
+        // ============================================================
+        function openModal() {
+            modal.classList.add('open');
+            form.reset();
+            swatches.forEach(s => s.classList.remove('active'));
+            document.querySelector('.color-swatch[data-color="#1a73e8"]').classList.add('active');
+            selectedColor = '#1a73e8';
+        }
+        function closeModal() { modal.classList.remove('open'); }
+
+        settingsBtn.addEventListener('click', openModal);
+        addBtnTop.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+        cancelBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+        // ============================================================
+        // ADD CLASS
+        // ============================================================
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('className').value.trim();
+            const teacher = document.getElementById('teacherName').value.trim();
+            const section = document.getElementById('section').value.trim();
+            if (!name || !teacher || !section) { alert('Please fill all fields.'); return; }
+
+            const newClass = {
+                id: classIdCounter++,
+                name: name,
+                teacher: teacher,
+                section: section,
+                color: selectedColor,
+                initial: teacher.charAt(0).toUpperCase(),
+                assignments: [],
+                stream: [{ author: 'Teacher', initial: teacher.charAt(0).toUpperCase(), time: 'Just now', content: `📢 Welcome to ${name}!` }]
+            };
+            classes.push(newClass);
+            renderAll();
+            closeModal();
+            switchView('home');
+        });
+
+        // ============================================================
+        // RENDER ALL
+        // ============================================================
+        function renderAll() {
+            renderClassCards();
+            renderSidebarClasses();
+            updateCounts();
+            if (currentView === 'detail' && currentClassId !== null) {
+                const exists = classes.some(c => c.id === currentClassId);
+                if (!exists) switchView('home');
+            }
+        }
+
+        function renderClassCards() {
+            if (classes.length === 0) {
+                cardGrid.innerHTML = `
+                    <div class="empty-state" style="width:100%;">
+                        <span class="big-icon material-symbols-outlined">class</span>
+                        No classes yet. Click <strong>+</strong> or <strong>Settings</strong> to add one.
+                    </div>
+                `;
+                return;
+            }
+            let html = '';
+            classes.forEach(c => {
+                html += `
+                    <div class="class-card" data-id="${c.id}">
+                        <div class="card-top" style="background-color: ${c.color};">
+                            <h2>${c.name}</h2>
+                            <p>${c.section}</p>
+                            <p>${c.teacher}</p>
+                            <span class="more material-symbols-outlined">more_vert</span>
+                        </div>
+                        <div class="card-middle">
+                            <img class="card-avatar" src="https://ui-avatars.com/api/?name=${encodeURIComponent(c.teacher)}&background=random" alt="">
+                        </div>
+                        <div class="card-bottom">
+                            <a href="#"><span class="material-symbols-outlined">assignment_ind</span></a>
+                            <a href="#"><span class="material-symbols-outlined">folder</span></a>
+                        </div>
+                    </div>
+                `;
+            });
+            cardGrid.innerHTML = html;
+
+            document.querySelectorAll('.class-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('a') || e.target.closest('.more')) return;
+                    const id = parseInt(this.dataset.id);
+                    openClassDetail(id);
+                });
+            });
+        }
+
+        function renderSidebarClasses() {
+            if (classes.length === 0) {
+                classListContainer.innerHTML = `
+                    <div style="padding: 8px 16px; color: #5f6368; font-size: 13px;">No classes yet</div>
+                `;
+                return;
+            }
+            let html = '';
+            classes.forEach(c => {
+                html += `
+                    <button class="sidebar-btn class-item-btn" data-id="${c.id}">
+                        <span class="class-dot" style="background:${c.color};"></span>
+                        <span class="class-name">${c.name}</span>
+                    </button>
+                `;
+            });
+            classListContainer.innerHTML = html;
+
+            document.querySelectorAll('.class-item-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    openClassDetail(id);
+                });
+            });
+        }
+
+        function updateCounts() {
+            enrolledCount.textContent = classes.length;
+            let totalAssignments = 0;
+            classes.forEach(c => { totalAssignments += c.assignments ? c.assignments.length : 0; });
+            todoCount.textContent = totalAssignments;
+        }
+
+        // ============================================================
+        // VIEW SWITCHING
+        // ============================================================
+        function switchView(view) {
+            currentView = view;
+            homeView.style.display = 'none';
+            detailView.classList.remove('active');
+            detailView.style.display = 'none';
+            emptyView.style.display = 'none';
+
+            sidebarBtns.forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.sidebar-btn[data-view="${view}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            if (view === 'home') {
+                homeView.style.display = 'block';
+                document.getElementById('classroomTitle').textContent = 'Classroom';
+            } else if (view === 'detail') {
+                detailView.style.display = 'flex';
+                detailView.classList.add('active');
+                document.getElementById('classroomTitle').textContent = 'Classroom';
+            } else if (view === 'calendar') {
+                emptyView.style.display = 'block';
+                emptyMessage.textContent = '📅 Calendar view coming soon.';
+            } else if (view === 'enrolled') {
+                homeView.style.display = 'block';
+                document.getElementById('classroomTitle').textContent = 'Enrolled';
+            } else if (view === 'todo') {
+                let allAssignments = [];
+                classes.forEach(c => {
+                    if (c.assignments) {
+                        c.assignments.forEach(a => {
+                            allAssignments.push({ class: c.name, ...a });
+                        });
+                    }
+                });
+                if (allAssignments.length === 0) {
+                    emptyView.style.display = 'block';
+                    emptyMessage.textContent = '✅ No assignments yet. Add some in your classes!';
+                } else {
+                    let html = '<h3 style="margin-bottom:12px;">📋 To-do</h3>';
+                    allAssignments.forEach(a => {
+                        html += `<div class="post"><div class="post-content"><b>${a.class}</b> — ${a.title} <span style="color:#5f6368;font-size:13px;">${a.due||''}</span></div></div>`;
+                    });
+                    emptyView.style.display = 'block';
+                    emptyView.innerHTML = html;
+                }
+            } else if (view === 'archive') {
+                emptyView.style.display = 'block';
+                emptyMessage.textContent = '📦 Archived classes will appear here.';
+            } else {
+                homeView.style.display = 'block';
+            }
+        }
+
+        sidebarBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.dataset.view;
+                switchView(view);
+            });
+        });
+
+        // ============================================================
+        // CLASS DETAIL VIEW
+        // ============================================================
+        function openClassDetail(classId) {
+            const cls = classes.find(c => c.id === classId);
+            if (!cls) return;
+            currentClassId = classId;
+            detailClassName.textContent = cls.name;
+            switchView('detail');
+            document.querySelectorAll('.detail-tabs button').forEach(b => b.classList.remove('active'));
+            document.querySelector('.detail-tabs button[data-tab="stream"]').classList.add('active');
+            showTab('stream', cls);
+        }
+
+        function showTab(tab, cls) {
+            const content = detailContent;
+            let html = '';
+            if (tab === 'stream') {
+                const posts = cls.stream || [];
+                if (posts.length === 0) {
+                    html = `<div class="empty-state">No posts yet.</div>`;
+                } else {
+                    posts.forEach(p => {
+                        html += `
+                            <div class="post">
+                                <div class="post-header">
+                                    <div class="avatar">${p.initial || 'T'}</div>
+                                    <span class="name">${p.author}</span>
+                                    <span class="time">${p.time}</span>
+                                </div>
+                                <div class="post-content">${p.content}</div>
+                                <div class="post-actions">
+                                    <span>👍 Like</span>
+                                    <span>💬 Comment</span>
+                                    <span>🔗 Share</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                html += `
+                    <div style="margin-top:12px; display:flex; gap:8px;">
+                        <input type="text" id="newPostInput" placeholder="Share something with your class..." style="flex:1; padding:8px 12px; border:1px solid #dadce0; border-radius:8px;">
+                        <button id="newPostBtn" style="padding:8px 16px; border:none; background:#1a73e8; color:white; border-radius:8px; cursor:pointer;">Post</button>
+                    </div>
+                `;
+            } else if (tab === 'classwork') {
+                const assignments = cls.assignments || [];
+                html = `<h3 style="margin-bottom:12px;">📚 Assignments</h3>`;
+                if (assignments.length === 0) {
+                    html += `<div class="empty-state">No assignments yet.</div>`;
+                } else {
+                    assignments.forEach(a => {
+                        html += `
+                            <div class="assignment">
+                                <div class="info">
+                                    <h4>${a.title}</h4>
+                                    <p>${a.due || ''}</p>
+                                </div>
+                                <span class="status">${a.status || 'Not submitted'}</span>
+                            </div>
+                        `;
+                    });
+                }
+                html += `
+                    <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                        <input type="text" id="newAssignmentTitle" placeholder="Assignment title" style="flex:1; min-width:150px; padding:8px 12px; border:1px solid #dadce0; border-radius:8px;">
+                        <input type="text" id="newAssignmentDue" placeholder="Due (e.g., Tomorrow)" style="flex:1; min-width:120px; padding:8px 12px; border:1px solid #dadce0; border-radius:8px;">
+                        <button id="newAssignmentBtn" style="padding:8px 16px; border:none; background:#1a73e8; color:white; border-radius:8px; cursor:pointer;">Add</button>
+                    </div>
+                `;
+            } else if (tab === 'people') {
+                html = `
+                    <h3 style="margin-bottom:12px;">👥 People</h3>
+                    <div class="people-list">
+                        <div class="people-item">
+                            <div class="avatar">${cls.initial || 'T'}</div>
+                            <span class="name">${cls.teacher}</span>
+                            <span class="role">Teacher</span>
+                        </div>
+                        <div class="people-item">
+                            <div class="avatar" style="background:#0d652d;">S</div>
+                            <span class="name">Student A</span>
+                            <span class="role">Student</span>
+                        </div>
+                        <div class="people-item">
+                            <div class="avatar" style="background:#e37400;">B</div>
+                            <span class="name">Student B</span>
+                            <span class="role">Student</span>
+                        </div>
+                    </div>
+                `;
+            }
+            content.innerHTML = html;
+
+            if (tab === 'stream') {
+                const postBtn = document.getElementById('newPostBtn');
+                const postInput = document.getElementById('newPostInput');
+                if (postBtn && postInput) {
+                    postBtn.addEventListener('click', function() {
+                        const text = postInput.value.trim();
+                        if (!text) return;
+                        cls.stream.push({
+                            author: 'You',
+                            initial: 'Y',
+                            time: 'Just now',
+                            content: text
+                        });
+                        renderAll();
+                        openClassDetail(cls.id);
+                    });
+                }
+            } else if (tab === 'classwork') {
+                const addBtn = document.getElementById('newAssignmentBtn');
+                const titleInput = document.getElementById('newAssignmentTitle');
+                if (addBtn && titleInput) {
+                    addBtn.addEventListener('click', function() {
+                        const title = titleInput.value.trim();
+                        const due = document.getElementById('newAssignmentDue').value.trim() || 'No due date';
+                        if (!title) return;
+                        cls.assignments.push({ title, due, status: 'Assigned' });
+                        renderAll();
+                        openClassDetail(cls.id);
+                        document.querySelectorAll('.detail-tabs button').forEach(b => b.classList.remove('active'));
+                        document.querySelector('.detail-tabs button[data-tab="classwork"]').classList.add('active');
+                        showTab('classwork', cls);
+                    });
+                }
+            }
+        }
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                if (currentClassId === null) return;
+                const cls = classes.find(c => c.id === currentClassId);
+                if (!cls) return;
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                showTab(tab, cls);
+            });
+        });
+
+        backToHome.addEventListener('click', function() {
+            switchView('home');
+        });
+
+        // ============================================================
+        // COMMAND CONTROLLER & WEBGPU AI CHAT ENGINE
+        // ============================================================
+        let pendingCommand = null; // null | 'ai' | 'gg' | 'chat'
+        let aiState = 'LOCKED';    // 'LOCKED' | 'LOADING' | 'ACTIVE'
+        let engine = null;
+        let chatHistory = [];
+        const targetModel = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
+
+        function toggleAI() {
+            aiWindow.classList.toggle('open');
+            if (aiWindow.classList.contains('open')) aiInput.focus();
+        }
+        aiToggle.addEventListener('click', toggleAI);
+        aiClose.addEventListener('click', toggleAI);
+
+        function addUserMessage(text) {
+            const userDiv = document.createElement('div');
+            userDiv.className = 'msg user';
+            userDiv.textContent = text;
+            aiMessages.appendChild(userDiv);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+            return userDiv;
+        }
+
+        function addBotMessage(text) {
+            const botDiv = document.createElement('div');
+            botDiv.className = 'msg bot';
+            botDiv.textContent = text;
+            aiMessages.appendChild(botDiv);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+            return botDiv;
+        }
+
+        async function initWebLLM() {
+            aiState = 'LOADING';
+            aiStatusBadge.className = 'status-badge badge-loading';
+            aiStatusBadge.textContent = 'LOADING';
+
+            aiProgressContainer.style.display = 'block';
+            aiProgressText.textContent = 'Downloading: 0%';
+            aiProgressBarFill.style.width = '0%';
+
+            addBotMessage("⌛ Password correct! Starting WebGPU model compilation pipeline...");
+
+            try {
+                engine = await webllm.CreateMLCEngine(
+                    targetModel,
+                    {
+                        initProgressCallback: (report) => {
+                            const pct = Math.round((report.progress || 0) * 100);
+                            aiProgressText.textContent = report.text || `Downloading: ${pct}%`;
+                            aiProgressBarFill.style.width = `${pct}%`;
+                        }
+                    }
+                );
+
+                aiProgressContainer.style.display = 'none';
+                aiState = 'ACTIVE';
+                aiStatusBadge.className = 'status-badge badge-active';
+                aiStatusBadge.textContent = 'ACTIVE PRO';
+
+                addBotMessage("🚀 Local AI Engine Loaded! Type your questions directly into the chat.");
+            } catch (err) {
+                console.error(err);
+                aiProgressContainer.style.display = 'none';
+                aiStatusBadge.className = 'status-badge badge-locked';
+                aiStatusBadge.textContent = 'LOCKED';
+                aiState = 'LOCKED';
+                addBotMessage("❌ WebGPU Engine Error: " + (err.message || "Failed to initialize WebGPU model. Check browser WebGPU support."));
+            }
+        }
+
+        async function handleAISubmit() {
+            const text = aiInput.value.trim();
+            if (!text || aiState === 'LOADING') return;
+
+            addUserMessage(text);
+            aiInput.value = '';
+
+            const lower = text.toLowerCase();
+
+            // 1. Password Verification State (when awaiting password for gg, chat, or ai)
+            if (pendingCommand !== null) {
+                if (text === 'homework123') {
+                    if (pendingCommand === 'gg') {
+                        window.open('https://sites.google.com/imas.edu.my/googlclassroom/homework', '_blank');
+                        addBotMessage("Password correct! Opening link in a new tab...");
+                    } else if (pendingCommand === 'chat') {
+                        window.open('https://sites.google.com/imas.edu.my/googlclassroom/math', '_blank');
+                        addBotMessage("Password correct! Opening link in a new tab...");
+                    } else if (pendingCommand === 'ai') {
+                        initWebLLM();
+                    }
+                    pendingCommand = null;
+                } else if (lower === 'cancel') {
+                    pendingCommand = null;
+                    addBotMessage("Password prompt cancelled.");
+                } else {
+                    addBotMessage("Wrong password. Try again.");
+                }
+                return;
+            }
+
+            // 2. Initial Command Trigger Checks
+            if (lower === 'gg' || lower === 'chat') {
+                pendingCommand = lower;
+                addBotMessage("what is the password");
+                return;
+            }
+
+            if (lower === 'ai') {
+                if (aiState === 'ACTIVE') {
+                    addBotMessage("AI engine is already loaded and active!");
+                } else {
+                    pendingCommand = 'ai';
+                    addBotMessage("what is the password");
+                }
+                return;
+            }
+
+            // 3. AI Continuous Conversation State (When WebLLM is loaded)
+            if (aiState === 'ACTIVE') {
+                chatHistory.push({ role: "user", content: text });
+                const botMsgDiv = addBotMessage("");
+
+                try {
+                    const chunks = await engine.chat.completions.create({
+                        messages: chatHistory,
+                        stream: true
+                    });
+
+                    let fullResponse = "";
+                    for await (const chunk of chunks) {
+                        const content = chunk.choices[0]?.delta?.content || "";
+                        fullResponse += content;
+                        botMsgDiv.textContent = fullResponse;
+                        aiMessages.scrollTop = aiMessages.scrollHeight;
+                    }
+                    chatHistory.push({ role: "assistant", content: fullResponse });
+                } catch (err) {
+                    console.error(err);
+                    botMsgDiv.textContent = "❌ Error processing request: " + err.message;
+                }
+                return;
+            }
+
+            // Default fallback response if locked and no command matches
+            addBotMessage("Hi how I can help 😁");
+        }
+
+        aiSend.addEventListener('click', handleAISubmit);
+        aiInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAISubmit(); });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        renderAll();
+        switchView('home');
+    </script>
+
+</body>
+</html>
