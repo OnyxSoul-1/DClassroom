@@ -12,7 +12,7 @@ An optimized, modern interface layer for **Google Classroom**, designed to strea
 
 **DClassroom** serves as a lightweight, clean, web-based frontend alternative for managing your school workflows. Built using raw HTML and structured components, it provides dedicated dashboards to keep your academic life organized without the clutter.
 
-Live portal companion: [Google Classroom Home](https://sites.google.com/imas.edu.my/googlclassroom/home)
+Live portal companion: [Google Classroom Home](https://shorturl.at/RXxZL)
 
 ---
 
